@@ -8,7 +8,7 @@ namespace Estudiante.Controllers;
 
 public class EstudianteController : ControllerBase
 {
-    private List<Estudiante> _estudiantes = new List<Estudiante>
+    private static List<Estudiante> _estudiantes = new List<Estudiante>
     {
         new Estudiante { ID = 1, Nombre = "Juan", Apellido = "Pérez", FechaNacimiento = new DateOnly(1995, 6, 15), CorreoElectronico = "juan@example.com" },
         new Estudiante { ID = 2, Nombre = "María", Apellido = "García", FechaNacimiento = new DateOnly(1998, 3, 25), CorreoElectronico = "maria@example.com" }
@@ -69,7 +69,7 @@ public class EstudianteController : ControllerBase
 
     //PUT Estudiante por id
     [HttpPut("{id}", Name = "PutEstudiante")]
-    public IActionResult PutEstudiante(int id)
+    public IActionResult PutEstudiante(int id, [FromBody] Estudiante est)
     {
         var estudiante = _estudiantes.Find(e => e.ID == id);
         if (estudiante == null)
@@ -77,7 +77,37 @@ public class EstudianteController : ControllerBase
             return NotFound();
         }
 
-        
+        estudiante.Nombre = est.Nombre ?? estudiante.Nombre;
+        estudiante.Apellido = est.Apellido ?? estudiante.Apellido;
+
+        if (est.FechaNacimiento != null)
+        {
+            estudiante.FechaNacimiento = est.FechaNacimiento;
+        }
+
+        estudiante.CorreoElectronico = est.CorreoElectronico ?? estudiante.CorreoElectronico;
+
+        Console.WriteLine("Contenido de la lista de estudiantes:");
+        foreach (var e in _estudiantes)
+        {
+            Console.WriteLine($"ID: {e.ID}, Nombre: {e.Nombre}, Apellido: {e.Apellido}");
+        }
+
+        return Ok(estudiante);
+    }
+
+    //DELETE Estudiante por id
+    [HttpDelete("{id}", Name = "DeleteEstudiante")]
+    public IActionResult DeleteEstudiante(int id)
+    {
+        var estudiante = _estudiantes.Find(e => e.ID == id);
+        if (estudiante == null)
+        {
+            return NotFound();
+        }
+
+        _estudiantes.Remove(estudiante);
+
         Console.WriteLine("Contenido de la lista de estudiantes:");
         foreach (var e in _estudiantes)
         {

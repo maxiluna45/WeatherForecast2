@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: API de Estudiantes
+  version: 1.0.0
+  description: API para gestionar estudiantes
+
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    Documentación de la API para Gestionar Estudiantes. Integración de Aplicaciones en Entorno Web 5K3.
+  contact:
+    email: maximilianoluna3645@gmail.com
+
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5159/api/
+
+
+paths:
+  /api/estudiantes:
+    post:
+      summary: Crear un estudiante
+      operationId: PostEstudiante
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estudiante'
+      responses:
+        '201':
+          description: Estudiante creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudiante'
+    get:
+      summary: Obtener todos los estudiantes
+      operationId: GetEstudiantes
+      responses:
+        '200':
+          description: Lista de estudiantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Estudiante'
+
+  /api/estudiantes/{id}:
+    get:
+      summary: Obtener un estudiante por ID
+      operationId: GetEstudiante
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estudiante encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudiante'
+        '404':
+          description: Estudiante no encontrado
+    put:
+      summary: Actualizar un estudiante por ID
+      operationId: PutEstudiante
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Estudiante'
+      responses:
+        '200':
+          description: Estudiante actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudiante'
+        '404':
+          description: Estudiante no encontrado
+    delete:
+      summary: Eliminar un estudiante por ID
+      operationId: DeleteEstudiante
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estudiante eliminado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estudiante'
+        '404':
+          description: Estudiante no encontrado
+
+components:
+  schemas:
+    Estudiante:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Nombre:
+          type: string
+        Apellido:
+          type: string
+        FechaNacimiento:
+          type: string
+          format: date
+        CorreoElectronico:
+          type: string
