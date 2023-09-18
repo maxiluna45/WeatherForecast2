@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Estudiante;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estudiante.Controllers;
 
 [ApiController]
 [Route("api/estudiantes")]
+[Authorize]
 
 public class EstudianteController : ControllerBase
 {
@@ -24,6 +26,7 @@ public class EstudianteController : ControllerBase
 
     // POST
     [HttpPost(Name = "PostEstudiante")]
+    [Authorize("write:estudiantes")]
     public IActionResult Post(Estudiante estudiante)
     {
         // Asignar un ID único (simulación)
@@ -45,6 +48,7 @@ public class EstudianteController : ControllerBase
 
     //GET Estudiantes
     [HttpGet(Name = "GetEstudiantes")]
+    [Authorize("read:estudiantes")]
     public IActionResult GetEstudiantes()
     {
         if (_estudiantes.Count == 0)
@@ -57,6 +61,7 @@ public class EstudianteController : ControllerBase
 
     //GET Estudiante por id
     [HttpGet("{id}", Name = "GetEstudiante")]
+    [Authorize("read:estudiantes")]
     public IActionResult GetEstudiante(int id)
     {
         var estudiante = _estudiantes.Find(e => e.ID == id);
@@ -69,6 +74,7 @@ public class EstudianteController : ControllerBase
 
     //PUT Estudiante por id
     [HttpPut("{id}", Name = "PutEstudiante")]
+    [Authorize("write:estudiantes")]
     public IActionResult PutEstudiante(int id, [FromBody] Estudiante est)
     {
         var estudiante = _estudiantes.Find(e => e.ID == id);
@@ -98,6 +104,7 @@ public class EstudianteController : ControllerBase
 
     //DELETE Estudiante por id
     [HttpDelete("{id}", Name = "DeleteEstudiante")]
+    [Authorize("write:estudiantes")]
     public IActionResult DeleteEstudiante(int id)
     {
         var estudiante = _estudiantes.Find(e => e.ID == id);
